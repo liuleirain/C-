@@ -1,5 +1,5 @@
 #include <stdio.h>
-#define MAX 1000000
+#define MAX 100000
 void Eratosthenes(char is_prime[], int n);
 
 int main(void) {
