@@ -4,8 +4,10 @@
 
 int identity_matrix(int matrix[][10]);
 
-int main(void){
-  int matrix[10][10] = {
+int main(void)
+{
+  int matrix[10][10] = 
+  {
     {1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 1, 0, 0, 0, 0, 0, 0, 0},
@@ -17,14 +19,19 @@ int main(void){
     {0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
   };
-  if(identity_matrix(matrix)){
+  if(identity_matrix(matrix))
+  {
     puts("Yes!!");
   }else
+  {
     puts("No!!");
+  }
+  
   return 0;
 }
 
-int identity_matrix(int matrix[10][10]){
+int identity_matrix(int matrix[10][10])
+{
   int row;
   int column;
 

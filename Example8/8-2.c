@@ -5,7 +5,8 @@ static double income_limits[] = { 0, 23350, 56550, 117950, 256500, DBL_MAX };
 static float base_tax[] = { 0, 3502.5, 12798.5, 31832.5, 81710.5 };
 static float percentage[] = { .15, .28, .31, .36, .396 };
 
-double single_tax( double income){
+double single_tax( double income)
+{
   int category;
 
   /*
@@ -20,7 +21,8 @@ double single_tax( double income){
   return base_tax[category] + percentage[category] * (income - income_limits[category]);
 }
 
-int main(void){
+int main(void)
+{
   double income = 30000.0;
   printf("%.2lf\n", single_tax(income));
   return 0;

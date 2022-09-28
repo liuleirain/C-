@@ -1,6 +1,7 @@
 #include <stdio.h>
 
-unsigned char char_values[3][6][4][5] = {
+unsigned char char_values[3][6][4][5] = 
+{
   { /* 0 */
     { /* 0 */
       { 0 },

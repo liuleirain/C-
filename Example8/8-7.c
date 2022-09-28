@@ -1,27 +1,17 @@
 /*
-** 从一组下标个维度信息中计算阵列偏移量.
+** 从一组下标和维度信息计算数组偏移量
 */
 #include <stdio.h>
 #include <stdarg.h>
-
 #define reg register
 
-int array_offset(int *arrayinfo, ...);
-
-int main(void)
-{
-  int array[] = { 3, 4, 6, 1, 5, -3, 3};
-  int value = array_offset(array,1,2,3,4,5,6,7,8);
-  printf("%d\n", value);
-  return 0;
-}
-
-int array_offset (int *arrayinfo, ...)
+int array_offset2(reg int *arrayinfo, ...)
 {
   reg int ndim;
+  reg int hi;
   reg int offset;
-  reg int hi, lo;
-  reg int i;
+  reg int lo;
+  reg int *sp;
   int s[10];
   va_list subscripts;
 
@@ -35,37 +25,40 @@ int array_offset (int *arrayinfo, ...)
     ** 将下标复制到数组
     */
     va_start(subscripts, arrayinfo);
-    for(i = 0; i < ndim; i += 1)
+    for(offset = 0; offset < ndim; offset += 1)
     {
-      s[i] = va_arg(subscripts, int);
+      s[offset] = va_arg(subscripts, int);
     }
     va_end(subscripts);
 
     /*
-    ** 每次计算一个维度的偏移量
+    ** 计算偏移量，从最后一个下标开始，一直后退到第一个下标
     */
     offset = 0;
-    for(i = 0; ndim; ndim--, i++)
+    arrayinfo += ndim * 2;
+    sp = s + ndim;
+    while(ndim-- >= 1)
     {
       /*
-      ** 获取下一个下标的限制
+      ** 得到下一个下标的限制
       */
-      lo = *arrayinfo++;
-      hi = *arrayinfo++;
+      hi = *--arrayinfo;
+      lo = *--arrayinfo;
+
       /*
       ** 请注意，没有必要测试hi < lo，因为如果这是真的，
       ** 那么下面的至少一个测试将失败。
       */
-      if(s[i] < lo || s[i] > hi)
+      if(*--sp > hi || *sp < lo)
       {
         return -1;
       }
+
       /*
       ** 计算偏移量
       */
       offset *= hi - lo + 1;
-      offset += s[i] - lo;
-
+      offset += *sp - lo;
     }
     return offset;
   }
