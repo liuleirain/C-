@@ -11,7 +11,7 @@
 /*
 ** 棋盘。如果一个元素为TRUE，那么该方块上有一个皇后;如果FALSE，就没有女王
 */
-int board[8][8];
+int board[8][8] = {0};
 
 /*
 ** print_board
@@ -39,7 +39,6 @@ void print_board()
       {
         printf(" +");
       }
-      putchar('\n');
     }
     putchar('\n');
   }
@@ -53,13 +52,12 @@ void print_board()
 */
 int confilicts(int row, int column)
 {
-  int i;
-
-  for(i = 1; i < 8; i += 1)
+  
+  /*
+  ** 向上，向左，向右。(不必核对;那几排还没有女王!)
+  */
+  for(int i = 0; i < 8; i++)
   {
-    /*
-    ** 向上，向左，向右。(不必核对;那几排还没有女王!)
-    */
     if(row - i >= 0 && board[row - i][column])
       return TRUE;
     if(column - i >= 0 && board[row][column - i])
@@ -70,11 +68,12 @@ int confilicts(int row, int column)
     /*
     ** 检查对角线:上和左，上和右。(不必检查;那里还没有女王呢!)
     */
-    if(row - i >= 0&& column - i >= 0 && board[row -i][column - i])
+    if(row - i >= 0 && column - i >= 0 && board[row -i][column - i])
       return TRUE;
     if(row - i >= 0 && column + i < 8 && board[row - i][column + i])
       return TRUE;
   }
+
 
   /*
   ** 如果我们走到这一步，就没有冲突了
@@ -96,13 +95,13 @@ void place_queen(int row)
   */
   for(column = 0; column < 8; column += 1)
   {
-    board[row][column] = TRUE;
 
     /*
     ** 看看这个女王是否可以攻击其他任何一个女王(不需要检查第一个女王!)
     */
-    if(row == 0 || !confilicts(row, column))
+    if(!confilicts(row, column))
     {
+      board[row][column] = TRUE;
       /*
       ** 没有冲突——如果我们还没有完成，递归地放置下一个皇后。
       ** 如果完成，打印解决方案!
