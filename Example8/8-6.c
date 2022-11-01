@@ -10,9 +10,14 @@ int array_offset(int *arrayinfo, ...);
 
 int main(void)
 {
+
   int array[] = { 3, 4, 6, 1, 5, -3, 3};
-  int value = array_offset(array,1,2,3,4,5,6,7,8);
-  printf("%d\n", value);
+  printf("%d\n", array_offset(array,4,1,-3));
+  printf("%d\n", array_offset(array,4,1,3));
+  printf("%d\n", array_offset(array,5,1,-3));
+  printf("%d\n", array_offset(array,4,1,-2));
+  printf("%d\n", array_offset(array,4,2,-3));
+  printf("%d\n", array_offset(array,6,3,1));
   return 0;
 }
 

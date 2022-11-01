@@ -24,7 +24,7 @@ unsigned char char_values[3][6][4][5] =
     { /* 1,3 */
       { 0 },
       { 0 },
-      { 0, 0, 0363 }
+      { 0, 0, 0xf3 }
     },
     { /* 1,4 */
       { 0 },
@@ -59,12 +59,27 @@ unsigned char char_values[3][6][4][5] =
       { 0 },
       { 0 },
       { 0 },
-      { 0, 0, 0, 0, '}' }
+      { 0, 0, 0, 0, 125 }
     }
   }
-}
+};
 
+int main(int argc, char const *argv[])
+{
+  int a, b, c, d;
+  for(a = 0; a < 3; a++)
+  {
+    for(b = 0; b < 6; b++)
+    {
+      for(c = 0; c < 4; c++)
+      {
+        for(d = 0; d < 5; d++)
+        {
+          printf("%d:%d:%d:%d ==== %d\n", a, b, c, d, char_values[a][b][c][d]);
+        }
+      }
+    }
+  }
 
-int main(void){
   return 0;
 }

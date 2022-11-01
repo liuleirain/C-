@@ -3,64 +3,51 @@
 */
 #include <stdio.h>
 #include <stdarg.h>
-#define reg register
 
-int array_offset2(reg int *arrayinfo, ...)
+int array_offset2(int *arrayinfo, ...)
 {
-  reg int ndim;
-  reg int hi;
-  reg int offset;
-  reg int lo;
-  reg int *sp;
-  int s[10];
-  va_list subscripts;
+  va_list var_arg;
+  int n = arrayinfo[0] * 2;
+  int loc = 0;
+  int temp_index[10], index = 0;
 
-  /*
-  ** 检查维度的数量
-  */
-  ndim = *arrayinfo++;
-  if(ndim >= 1 && ndim <= 10)
+  va_start(var_arg, arrayinfo);
+
+  while(index < arrayinfo[0])
   {
-    /*
-    ** 将下标复制到数组
-    */
-    va_start(subscripts, arrayinfo);
-    for(offset = 0; offset < ndim; offset += 1)
-    {
-      s[offset] = va_arg(subscripts, int);
-    }
-    va_end(subscripts);
-
-    /*
-    ** 计算偏移量，从最后一个下标开始，一直后退到第一个下标
-    */
-    offset = 0;
-    arrayinfo += ndim * 2;
-    sp = s + ndim;
-    while(ndim-- >= 1)
-    {
-      /*
-      ** 得到下一个下标的限制
-      */
-      hi = *--arrayinfo;
-      lo = *--arrayinfo;
-
-      /*
-      ** 请注意，没有必要测试hi < lo，因为如果这是真的，
-      ** 那么下面的至少一个测试将失败。
-      */
-      if(*--sp > hi || *sp < lo)
-      {
-        return -1;
-      }
-
-      /*
-      ** 计算偏移量
-      */
-      offset *= hi - lo + 1;
-      offset += *sp - lo;
-    }
-    return offset;
+    temp_index[index++] = va_arg(var_arg, int);
   }
-  return -1;
+
+  for(; n > 0; n -= 2)
+  {
+    // 进行下标检测
+    if(temp_index[--index] >= arrayinfo[n - 1] && temp_index[index] <= arrayinfo[n])
+    {
+      loc *= arrayinfo[n] - arrayinfo[n - 1] + 1;
+      loc += temp_index[index] - arrayinfo[n - 1];
+    }
+    else
+    {
+      return -1;
+    }
+  }
+
+  va_end(var_arg);
+  return loc;
+}
+
+int main(void)
+{
+  int arrayinfo[] = {3, 4, 6, 1, 5, -3, 3};
+  printf("%d\n", array_offset2(arrayinfo,4,1,-3));
+  printf("%d\n", array_offset2(arrayinfo,5,1,-3));
+  printf("%d\n", array_offset2(arrayinfo,6,1,-3));
+  printf("%d\n", array_offset2(arrayinfo,4,2,-3));
+  printf("%d\n", array_offset2(arrayinfo,4,3,-3));
+  printf("%d\n", array_offset2(arrayinfo,4,1,-2));
+  printf("%d\n", array_offset2(arrayinfo,4,1,-1));
+  printf("%d\n", array_offset2(arrayinfo,5,3,-1));
+  printf("%d\n", array_offset2(arrayinfo,6,5,3));
+
+  return 0;
 }

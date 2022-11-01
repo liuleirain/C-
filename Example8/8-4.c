@@ -3,7 +3,7 @@
 #define FALSE 0
 #define SIZE 10
 
-int identity_matrix(int *matrix, int size);
+int identity_matrix(int (*matrix)[SIZE], int size);
 
 int main(void)
 {
@@ -18,7 +18,7 @@ int main(void)
     {0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 1, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
   };
   if(identity_matrix(matrix, SIZE))
   {
@@ -28,7 +28,7 @@ int main(void)
   return 0;
 }
 
-int identity_matrix(int *matrix, int size)
+int identity_matrix(int (*matrix)[SIZE], int size)
 {
   int row;
   int column;
@@ -43,7 +43,7 @@ int identity_matrix(int *matrix, int size)
       /*
       ** 如果行号等于列号，则值为1，否则为0
       */
-      if(*(matrix++) != (row == column)) return FALSE;
+      if(matrix[row][column] != (row == column)) return FALSE;
     }
   }
   return TRUE;
