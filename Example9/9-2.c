@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-int my_strlen(const char *str);
+int my_strlen(const char* str);
 
 int main()
 {
@@ -10,12 +10,12 @@ int main()
   return 0;
 }
 
-int my_strlen(const char *str)
+int my_strlen(const char* str)
 {
   int res = 0;
-  for(int i = 0; *(str + i) != '\0'; i++)
+  for (int i = 0; *(str + i) != '\0'; i++)
   {
     res += 1;
   }
   return res;
-} 
+}

@@ -13,15 +13,16 @@ int main()
   /*
   ** 读入文本行，知道发现EOF
   */
-  while(gets(buffer))
+  while (gets(buffer))
   {
-    char *word;
+    char* word;
     /*
     ** 从缓冲去逐个提取单词，直到缓冲区内不再有单词
     */
-    for(word = strtok(buffer, whitespace); word != NULL; word = strtok(NULL, whitespace))
+    char* whitespace = " ";
+    for (word = strtok(buffer, whitespace); word != NULL; word = strtok(NULL, whitespace))
     {
-      if(strcmp(word, "the") == 0)
+      if (strcmp(word, "the") == 0)
         count += 1;
     }
   }

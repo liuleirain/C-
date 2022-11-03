@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-int count_chars(char const *str, char const *chars);
+int count_chars(char const* str, char const* chars);
 
 int main()
 {
@@ -12,10 +12,10 @@ int main()
   return 0;
 }
 
-int count_chars(char const *str, char const *chars)
+int count_chars(char const* str, char const* chars)
 {
   int count = 0;
-  while((str = strpbrk(str, chars)) != NULL)
+  while ((str = strpbrk(str, chars)) != NULL)
   {
     count += 1;
     str++;
