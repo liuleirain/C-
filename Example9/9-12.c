@@ -5,6 +5,9 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "9-13.c"
+#include "9-14.c"
+
 #define TRUE 1
 #define FALSE 0
 
@@ -12,8 +15,17 @@ int prepare_key(char* key);
 
 int main()
 {
-  char key[20] = "TRAILBLAZERS";
-  prepare_key(key);
+  char key[50] = "TRAILBLAZERS";
+  char data[50] = "Attact at dawn";
+  if (prepare_key(key))
+  {
+    encrypt(data, key);
+    printf("Encrypt:%s\n", data);
+    decrypt(data, key);
+    printf("Decrypt:%s\n", data);
+  }
+  else
+    printf("密钥必须是字符组成！");
   return 0;
 }
 
@@ -33,10 +45,10 @@ int prepare_key(char* key)
   */
   for (keyp = key; (character = *keyp) != '\0'; keyp++)
   {
-    if (!islower(character))
+    if (!isupper(character))
     {
-      if (!isupper(character)) return FALSE;
-      *keyp = tolower(character);
+      if (!islower(character)) return FALSE;
+      *keyp = toupper(character);
     }
   }
 
@@ -55,7 +67,7 @@ int prepare_key(char* key)
   /*
   ** 现在把剩下的字母加到键上。这利用了上面的循环让keyp指向结束的NULL字节这一事实。
   */
-  for (character = 'a'; character <= 'z'; character += 1)
+  for (character = 'A'; character <= 'Z'; character += 1)
   {
     if (strchr(key, character) == NULL)
     {
@@ -63,6 +75,5 @@ int prepare_key(char* key)
       *keyp = '\0';
     }
   }
-  printf("key: %s\n", key);
   return TRUE;
 }
