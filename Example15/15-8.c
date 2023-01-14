@@ -12,7 +12,7 @@
 **函数转储流的内容
 */
 void dump(FILE* stream) {
-  long offset;
+  unsigned int offset;
   unsigned char data[16];
   int len;
   char buffer[BUFFER_SIZE];
@@ -35,7 +35,7 @@ void dump(FILE* stream) {
     **开始使用偏移量构建输出缓冲区
     */
     sprintf(buffer, "%06X ", offset);
-
+    *(buffer + 7) = ' ';
     /*
     **准备指向缓冲区的十六进制和字符部分的指针，并将它们初始化为空格
     */
@@ -76,4 +76,26 @@ void dump(FILE* stream) {
     puts(buffer);
     offset += len;
   }
+}
+
+/*
+**主程序。转储文件(如果有参数)或stdin。
+*/
+int main(int argc, char** argv) {
+  if (argc <= 1)
+    dump(stdin);
+  else {
+    FILE* stream;
+    stream = fopen(argv[1], "rb");
+    if (stream == NULL) {
+      perror(argv[1]);
+      exit(EXIT_FAILURE);
+    }
+    dump(stream);
+    if (fclose(stream) != 0) {
+      perror(argv[1]);
+      exit(EXIT_FAILURE);
+    }
+  }
+  return EXIT_SUCCESS;
 }

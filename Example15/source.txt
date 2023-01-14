@@ -1,4 +1,11 @@
-42 34 25
-54 32 12 32 34
-53 32
-12 21 34 56 43 23 14 52
+ There are innumerable details that were not specified in the description of the program, so
+student’s answers may vary in many areas. The solution shown here contains three modules:
+main.c obtains the command line argument and implements the transaction processing loop,
+process.c implements the functions needed to decode and process the transactions, and io.c
+implements the functions to open, read, write, and close the inventory file. Function prototypes
+and other definitions needed by these modules are found in the associated header files.
+There is an additional header file, part.h, which contains definitions relating to the structure that holds information about a part. typedefs are used to help ensure that variables are
+declared with their proper types. This also makes it easier to change the type of a variable later
+if the need arises. The declarations for TRUE and FALSE don’t really have anything to do with a
+106 Chapter 15 Input/Output Functions
+part, and appear in part.h only because there was no better place to put them. A larger program might have enough global definitions to justify putting them in a separate include file.
