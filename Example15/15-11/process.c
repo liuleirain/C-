@@ -59,6 +59,7 @@ static void buy_sell(char request_type, Part_number part_number, Quantity quanti
         return;
       }
       unit_value = part.total_value / part.quantity;
+      part.quantity -= quantity;
       part.total_value -= quantity * unit_value;
       printf("Total profit:$%.2f\n", quantity * (price_each - unit_value));
     }
@@ -94,11 +95,11 @@ static void print(Part_number part_number) {
 static void print_all(void) {
   Part_number p;
   Part part;
-  printf("Part number Description            Quantity  Total value\n");
-  printf("--------- ------------------- --------- ----------\n");
+  printf("Part number Description           Quantity  Total value\n");
+  printf("----------- --------------------- --------- -----------\n");
   for (p = 1; p <= last_part_number(); p++)
     if (read_part(p, &part))
-      printf("%11lu %s %10hu %11.2f\n", p, part.description, part.quantity, part.total_value);
+      printf("%11lu %-*.*s %10hu %11.2f\n", p, MAX_DESCRIPTION, MAX_DESCRIPTION, part.description, part.quantity, part.total_value);
 }
 
 /*解码和处理一个事务*/
@@ -127,12 +128,12 @@ int process_request(void) {
       total();
   }
   /*“new”:需要说明，数量，成本。它使用下一个可用的零件号。*/
-  else if (sscanf(request, "new %s %hu %lf %1s",
+  else if (sscanf(request, "new %[^,],%hu,%lf %1s",
     description, &quantity, &price_each, left_over) == 3) {
     new_part(description, quantity, price_each);
   }
   /*“buy”和“sell”:分别要求零件数量、数量、价格。*/
-  else if (sscanf(request, "%10s %lu %hu %lf %1s", request_type,
+  else if (sscanf(request, "%10s %lu,%hu,%lf %1s", request_type,
     &part_number, &quantity, &price_each, left_over) == 4 &&
     (strcmp(request_type, "buy") == 0
       || strcmp(request_type, "sell") == 0)) {
