@@ -13,14 +13,21 @@ int sort_int(int a, int b) {
 int sort(void const* x, void const* y) {
   char* a = (char*)x;
   char* b = (char*)y;
-  while (*a != *b) {
+  while (*a == *b) {
     a++;
     b++;
   }
   return *a - *b;
 }
 
-void insertion_sort(void* base, size_t n_elements, size_t el_size, int (*compare)(void const* a, void const* b)) {
+void print_array(int* ar, int n) {
+  for (int i = 0; i < n; i++) {
+    printf("%d ", ar[i]);
+  }
+  putchar('\n');
+}
+
+void insertion_sort2(void* base, size_t n_elements, size_t el_size, int (*compare)(void const* a, void const* b)) {
   char* array = base;
   //存放灵石需要位于的元素
   char* temp = malloc(el_size);
@@ -44,24 +51,54 @@ void insertion_sort(void* base, size_t n_elements, size_t el_size, int (*compare
       }
     }
     sortIdx++;
+    print_array(base, n_elements);
   }
   free(temp);
 }
 
+void insertion_sort(void* base, size_t n_elements, size_t el_size, int(*compare)(void const* x, void const* y)) {
+  char* array;
+  char* temp;
+  int i;
+  int next_element;
+
+  /*将基址复制到char*中，这样我们就可以做指针算术了。然后获取一个足以容纳单个元素的临时数组。*/
+  array = base;
+  temp = malloc(el_size);
+  assert(temp != NULL);
+
+  /*数组中的第一个元素已经排序。把剩下的一个一个插入*/
+  for (next_element = 1; next_element < n_elements; next_element += 1) {
+    char* i_ptr = array;
+    char* next_ptr = array + next_element * el_size;
+
+    /*找到插入下一个元素的正确位置*/
+    for (i = 0; i < next_element; i++, i_ptr += el_size)
+      if (compare(next_ptr, i_ptr) < 0) break;
+
+    /*如果我们一直走到数组排序部分的末尾，那么下一个元素应该在那些已经排序的元素之后。这就是现在的情况，所以我们结束了。*/
+    if (i == next_element) continue;
+
+    /*否则，我们必须在I所指向的元素之前插入下一个元素。首先，将下一个元素复制到临时数组中*/
+    memcpy(temp, next_ptr, el_size);
+
+    /*现在将元素从I复制到数组排序部分的末尾*/
+    memmove(i_ptr + el_size, i_ptr, (next_element - i) * el_size);
+
+    /*最后，插入下一个元素*/
+    memcpy(i_ptr, temp, el_size);
+    print_array(base, n_elements);
+  }
+  free(temp);
+}
 
 int main(int argc, char** argv) {
-  int array[] = { 5,3,6,71,3,2,5 };
+  int array[] = { 25,13,6,71,3,2,5,8 };
   int len = sizeof(array) / sizeof(int);
-  printf("Source:");
-  for (int i = 0; i < len; i++) {
-    printf("%d ", array[i]);
-  }
-  putchar('\n');
+  printf("Source:\t");
+  print_array(array, len);
   insertion_sort(array, len, sizeof(int), sort);
-  printf("Sort:");
-  for (int i = 0; i < len; i++) {
-    printf("%d ", array[i]);
-  }
-  putchar('\n');
+  printf("Sort:\t");
+  print_array(array, len);
   return 0;
 }
