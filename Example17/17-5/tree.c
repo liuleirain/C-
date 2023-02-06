@@ -69,7 +69,7 @@ TreeNode* find_2(TREE_TYPE value) {
   return current;
 }
 
-void destory_tree(TREE_TYPE value) {
+void destroy_tree(TREE_TYPE value) {
   TreeNode* p = find_2(value);
   if (p) {
     printf("%d ", p->value);
